@@ -32,7 +32,7 @@ echo "--> Postgres ready.
 Applying migrations...
 "
 
-./flyway-migrate.sh
+PG_USER=vulcanito ./flyway-migrate.sh
 
 echo "--> Migrations applied successfully.
 

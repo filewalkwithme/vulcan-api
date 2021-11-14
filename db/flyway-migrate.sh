@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
-docker exec vulcanito_db psql -c "DROP DATABASE IF EXISTS vulcanito_test;" -U postgres
-docker exec vulcanito_db psql -c "DROP USER IF EXISTS vulcanito_test;" -U postgres
-docker exec vulcanito_db psql -c "CREATE USER vulcanito_test WITH PASSWORD 'vulcanito_test';" -U postgres
-docker exec vulcanito_db psql -c "ALTER USER vulcanito_test WITH SUPERUSER;" -U postgres
-docker exec vulcanito_db psql -c "CREATE DATABASE vulcanito_test;" -U postgres
+
+PG_USER="${PG_USER:-postgres}"
+
+docker exec vulcanito_db psql -c "DROP DATABASE IF EXISTS vulcanito_test;" -U $PG_USER
+docker exec vulcanito_db psql -c "DROP USER IF EXISTS vulcanito_test;" -U $PG_USER
+docker exec vulcanito_db psql -c "CREATE USER vulcanito_test WITH PASSWORD 'vulcanito_test';" -U $PG_USER
+docker exec vulcanito_db psql -c "ALTER USER vulcanito_test WITH SUPERUSER;" -U $PG_USER
+docker exec vulcanito_db psql -c "CREATE DATABASE vulcanito_test;" -U $PG_USER
 
 docker run --net=host --rm -v "$PWD":/scripts flyway/flyway:"${FLYWAY_VERSION:-8}-alpine" \
     -user=vulcanito -password=vulcanito -url=jdbc:postgresql://localhost:5432/vulcanito \
